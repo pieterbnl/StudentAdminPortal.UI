@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { HttpClientModule } from '@angular/common/http';
+
 // Material imports
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -58,8 +60,12 @@ import { StudentsComponent } from './students/students.component';
 @NgModule({
   declarations: [AppComponent, TopNavComponent, StudentsComponent],
   imports: [
+    // Angular imports
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,    
+    HttpClientModule,
+
+    // Materialize imports...
     BrowserAnimationsModule,
     MatAutocompleteModule,
     MatCheckboxModule,
@@ -96,7 +102,7 @@ import { StudentsComponent } from './students/students.component';
     MatTooltipModule,
     MatPaginatorModule,
     MatSortModule,
-    MatTableModule,
+    MatTableModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
