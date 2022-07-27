@@ -5,8 +5,8 @@
 </div>
 
 <div class="container">
-  <div class="mt-1">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <div class="mt-1 mat-elevation-z6">
+    <table mat-table [dataSource]="dataSource" class="">
 
       <!-- First name Column -->
       <ng-container matColumnDef="firstName">
@@ -47,5 +47,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    
+    <mat-paginator 
+      [length]="15"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      aria-label="Select page">
+    </mat-paginator>
   </div>
 </div>
