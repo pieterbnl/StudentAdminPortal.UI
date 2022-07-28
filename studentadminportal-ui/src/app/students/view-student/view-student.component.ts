@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Student } from 'src/app/models/ui-models/student.model';
+import { Gender } from 'src/app/models/ui-models/gender.model';
+import { GenderService } from 'src/app/services/gender.service';
 import { StudentService } from '../student.service';
 
 @Component({
   selector: 'app-view-student',
   templateUrl: './view-student.component.html',
-  styleUrls: ['./view-student.component.css']
+  styleUrls: ['./view-student.component.css'],
 })
 export class ViewStudentComponent implements OnInit {
   studentId: string | null | undefined;
@@ -22,33 +24,38 @@ export class ViewStudentComponent implements OnInit {
     profileImageUrl: '',
     gender: {
       id: '',
-      description: ''
+      description: '',
     },
     address: {
       id: '',
       physicalAddress: '',
-      postalAddress: ''
-    }
-  }
+      postalAddress: '',
+    },
+  };
+
+  genderList: Gender[] = [];
 
   constructor(
     private readonly _studentService: StudentService,
-    private readonly route: ActivatedRoute) { }
+    private readonly _genderService: GenderService,
+    private readonly route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(
-      (params) => {
-        this.studentId = params.get('id'); // NOTE: 'id' is as specified in the routing-module !
+    this.route.paramMap.subscribe((params) => {
+      this.studentId = params.get('id'); // NOTE: 'id' is as specified in the routing-module !
 
-        if (this.studentId) {
-          this._studentService.getStudent(this.studentId)
-            .subscribe(
-              (successResponse) => {
-                this.student = successResponse;
-              }
-            );
-        }
+      if (this.studentId) {
+        this._studentService
+          .getStudent(this.studentId)
+          .subscribe((successResponse) => {
+            this.student = successResponse;
+          });
+
+        this._genderService.getGenderList().subscribe((successResponse) => {
+          this.genderList = successResponse;
+        });
       }
-    );    
+    });
   }
 }
