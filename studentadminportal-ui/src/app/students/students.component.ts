@@ -21,6 +21,7 @@ export class StudentsComponent implements OnInit {
     'email',
     'mobile',
     'gender',
+    'edit'
   ];
 
   // Create datasource for Angular materialize table
