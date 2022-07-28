@@ -5,6 +5,15 @@
 </div>
 
 <div class="container">
+
+  <div class="row end-xs mt-1">    
+    <div class="col-xs-12">
+      <input type="text" class="search-input" placeholder="search students"
+      [(ngModel)]="filterString"
+      (keyup)="filterStudents()">
+    </div>
+  </div>
+
   <div class="mt-1 mat-elevation-z6">
     <table mat-table matSort [dataSource]="dataSource" class="">
 

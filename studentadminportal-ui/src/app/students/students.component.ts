@@ -20,13 +20,15 @@ export class StudentsComponent implements OnInit {
     'dateOfBirth',
     'email',
     'mobile',
-    'gender'
+    'gender',
   ];
 
   // Create datasource for Angular materialize table
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
   @ViewChild(MatPaginator) matPaginator!: MatPaginator;
   @ViewChild(MatSort) matSort!: MatSort;
+
+  filterString = "";
 
   constructor(private _studentService: StudentService) {}
 
@@ -37,18 +39,21 @@ export class StudentsComponent implements OnInit {
         this.students = successRepsonse;
         this.dataSource = new MatTableDataSource<Student>(this.students); // fill dataSource with list of students
 
-        if(this.matPaginator) {          
+        if (this.matPaginator) {
           this.dataSource.paginator = this.matPaginator;
         }
 
-        if(this.matSort) {
+        if (this.matSort) {
           this.dataSource.sort = this.matSort;
         }
-
       },
       (errorResponse) => {
         console.log(errorResponse);
       }
     ); // subscribe as studentservice returns an observable
+  }
+
+  filterStudents() {
+    this.dataSource.filter = this.filterString.trim().toLowerCase();    
   }
 }
