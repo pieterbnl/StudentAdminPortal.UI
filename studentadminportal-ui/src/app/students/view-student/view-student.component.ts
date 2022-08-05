@@ -58,4 +58,20 @@ export class ViewStudentComponent implements OnInit {
       }
     });
   }
+
+  onUpdate(): void {
+    console.log(this.student);
+
+    // Call student service to update student
+    this._studentService.updateStudent(this.student.id, this.student)
+      .subscribe(
+        (successResponse) => {
+          console.log(successResponse);
+          // show a notification
+        },
+        (errorResponse) => {
+          // log it
+        }
+      );
+  }
 }
