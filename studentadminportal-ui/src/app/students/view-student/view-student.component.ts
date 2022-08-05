@@ -52,22 +52,24 @@ export class ViewStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.studentId = params.get('id'); // NOTE: 'id' is as specified in the routing-module !
 
-    if (this.studentId) {
-      // If the route contains 'add' then show new student functionality
-      // Otherwise, show existing student functionality
-      if(this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
-        this.isNewStudent = true;
-        this.pageHeader = 'Add new student';
-      } else {
-        this.isNewStudent = false;
-        this.pageHeader = 'Edit student';
-      }
+      if (this.studentId) {      
+        if (this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
+        // If the route contains 'add' then show new student functionality
+          this.isNewStudent = true;
+          this.pageHeader = 'Add new student';
+        } 
+        else       
+        {
+        // Otherwise, show existing student functionality
+          this.isNewStudent = false;
+          this.pageHeader = 'Edit student';
 
-    this._studentService
-          .getStudent(this.studentId)
-          .subscribe((successResponse) => {
-            this.student = successResponse;
-          });
+          this._studentService
+            .getStudent(this.studentId)
+            .subscribe((successResponse) => {
+              this.student = successResponse;
+            });
+        }   
 
         this._genderService.getGenderList().subscribe((successResponse) => {
           this.genderList = successResponse;
@@ -114,6 +116,22 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onAdd(): void {
+    this._studentService.addStudent(this.student)
+    .subscribe(
+      (successResponse) => {
+        // show a notification
+        this.snackbar.open('Student added succesfully', undefined, {
+          duration: 2000,
+        });
+
+        setTimeout(() => {
+          this.router.navigateByUrl(`students/${successResponse.id}`);
+        }, 2000);                
+      },
+      (errorResponse) => {
+        // console.log(errorResponse);
+      }
+    );
     
   }
 }
