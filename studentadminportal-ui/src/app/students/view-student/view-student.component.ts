@@ -4,6 +4,7 @@ import { Student } from 'src/app/models/ui-models/student.model';
 import { Gender } from 'src/app/models/ui-models/gender.model';
 import { GenderService } from 'src/app/services/gender.service';
 import { StudentService } from '../student.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-view-student',
@@ -38,7 +39,8 @@ export class ViewStudentComponent implements OnInit {
   constructor(
     private readonly _studentService: StudentService,
     private readonly _genderService: GenderService,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -65,9 +67,11 @@ export class ViewStudentComponent implements OnInit {
     // Call student service to update student
     this._studentService.updateStudent(this.student.id, this.student)
       .subscribe(
-        (successResponse) => {
-          console.log(successResponse);
+        (successResponse) => {          
           // show a notification
+          this.snackbar.open('Student updated succesfully', undefined, {
+            duration: 2000
+          });
         },
         (errorResponse) => {
           // log it
