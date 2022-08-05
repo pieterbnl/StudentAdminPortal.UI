@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './view-student.component.html',
   styleUrls: ['./view-student.component.css'],
 })
+
 export class ViewStudentComponent implements OnInit {
   studentId: string | null | undefined;
 
@@ -34,6 +35,9 @@ export class ViewStudentComponent implements OnInit {
     },
   };
 
+  isNewStudent = false;
+  pageHeader = '';
+
   genderList: Gender[] = [];
 
   constructor(
@@ -48,8 +52,18 @@ export class ViewStudentComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.studentId = params.get('id'); // NOTE: 'id' is as specified in the routing-module !
 
-      if (this.studentId) {
-        this._studentService
+    if (this.studentId) {
+      // If the route contains 'add' then show new student functionality
+      // Otherwise, show existing student functionality
+      if(this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
+        this.isNewStudent = true;
+        this.pageHeader = 'Add new student';
+      } else {
+        this.isNewStudent = false;
+        this.pageHeader = 'Edit student';
+      }
+
+    this._studentService
           .getStudent(this.studentId)
           .subscribe((successResponse) => {
             this.student = successResponse;
@@ -97,5 +111,9 @@ export class ViewStudentComponent implements OnInit {
         // log it
       }
     );
+  }
+
+  onAdd(): void {
+    
   }
 }
