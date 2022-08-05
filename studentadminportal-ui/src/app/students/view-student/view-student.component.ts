@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from 'src/app/models/ui-models/student.model';
 import { Gender } from 'src/app/models/ui-models/gender.model';
 import { GenderService } from 'src/app/services/gender.service';
@@ -40,7 +40,8 @@ export class ViewStudentComponent implements OnInit {
     private readonly _studentService: StudentService,
     private readonly _genderService: GenderService,
     private readonly route: ActivatedRoute,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -62,20 +63,39 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onUpdate(): void {
-    console.log(this.student);
-
     // Call student service to update student
-    this._studentService.updateStudent(this.student.id, this.student)
-      .subscribe(
-        (successResponse) => {          
-          // show a notification
-          this.snackbar.open('Student updated succesfully', undefined, {
-            duration: 2000
-          });
-        },
-        (errorResponse) => {
-          // log it
-        }
-      );
+    this._studentService.updateStudent(this.student.id, this.student).subscribe(
+      (successResponse) => {
+        // show a notification
+        this.snackbar.open('Student updated succesfully', undefined, {
+          duration: 2000,
+        });
+      },
+      (errorResponse) => {
+        // log it
+      }
+    );
+  }
+
+  onDelete(): void {
+    // Call student service to update student
+    this._studentService.deleteStudent(this.student.id)
+    .subscribe(
+      (successResponse) => {
+        this.router.navigateByUrl('students');
+        
+        // show a notification
+        this.snackbar.open('Student deleted succesfully', undefined, {
+          duration: 2000,
+        });
+
+        // setTimeout(() => {
+        //   this.router.navigateByUrl('students');
+        // }, 2000);        
+      },
+      (errorResponse) => {
+        // log it
+      }
+    );
   }
 }

@@ -8,20 +8,24 @@ import { UpdateStudentRequest } from '../models/api-models/update-student-reques
   providedIn: 'root',
 })
 export class StudentService {
-
   private baseApiUrl = 'https://localhost:44390/';
 
   constructor(private httpClient: HttpClient) {}
 
   getStudents(): Observable<Student[]> {
-    return this.httpClient.get<Student[]>(this.baseApiUrl + 'students')
+    return this.httpClient.get<Student[]>(this.baseApiUrl + 'students');
   }
 
   getStudent(studentId: string): Observable<Student> {
-    return this.httpClient.get<Student>(this.baseApiUrl + 'students/' + studentId)
+    return this.httpClient.get<Student>(
+      this.baseApiUrl + 'students/' + studentId
+    );
   }
 
-  updateStudent(studentId: string, studentRequest: Student): Observable<Student> {
+  updateStudent(
+    studentId: string,
+    studentRequest: Student
+  ): Observable<Student> {
     const updateStudentRequest: UpdateStudentRequest = {
       firstName: studentRequest.firstName,
       lastName: studentRequest.lastName,
@@ -30,9 +34,16 @@ export class StudentService {
       mobile: studentRequest.mobile,
       genderId: studentRequest.genderId,
       physicalAddress: studentRequest.address.physicalAddress,
-      postalAddress: studentRequest.address.postalAddress
+      postalAddress: studentRequest.address.postalAddress,
     };
 
-    return this.httpClient.put<Student>(this.baseApiUrl + 'students/' + studentId, updateStudentRequest);
+    return this.httpClient.put<Student>(
+      this.baseApiUrl + 'students/' + studentId,
+      updateStudentRequest
+    );
+  }
+
+  deleteStudent(studentId: string): Observable<Student> {    
+    return this.httpClient.delete<Student>(this.baseApiUrl + 'students/' + studentId);
   }
 }
