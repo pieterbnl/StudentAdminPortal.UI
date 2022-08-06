@@ -37,6 +37,7 @@ export class ViewStudentComponent implements OnInit {
 
   isNewStudent = false;
   pageHeader = '';
+  profileImageUrl = '';
 
   genderList: Gender[] = [];
 
@@ -57,6 +58,7 @@ export class ViewStudentComponent implements OnInit {
         // If the route contains 'add' then show new student functionality
           this.isNewStudent = true;
           this.pageHeader = 'Add new student';
+          this.setProfileImage();
         } 
         else       
         {
@@ -134,4 +136,14 @@ export class ViewStudentComponent implements OnInit {
     );
     
   }
+
+  private setProfileImage(): void {
+    if (this.student.profileImageUrl) {
+      // Fetch the profile image by url
+    } else {
+      // Display a default
+      this.profileImageUrl = '/assets/profile_image_male.png';
+    }
+  }
+
 }
