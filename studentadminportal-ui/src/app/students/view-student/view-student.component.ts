@@ -1,16 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from 'src/app/models/ui-models/student.model';
 import { Gender } from 'src/app/models/ui-models/gender.model';
 import { GenderService } from 'src/app/services/gender.service';
 import { StudentService } from '../student.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-view-student',
   templateUrl: './view-student.component.html',
   styleUrls: ['./view-student.component.css'],
 })
+
 export class ViewStudentComponent implements OnInit {
   studentId: string | null | undefined;
 
@@ -39,6 +41,8 @@ export class ViewStudentComponent implements OnInit {
   profileImageUrl = '';
 
   genderList: Gender[] = [];
+
+  @ViewChild('studentDetailsForm') studentDetailsForm?: NgForm;
 
   constructor(
     private readonly _studentService: StudentService,
@@ -82,18 +86,29 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onUpdate(): void {
-    // Call student service to update student
-    this._studentService.updateStudent(this.student.id, this.student).subscribe(
-      (successResponse) => {
-        // show a notification
-        this.snackbar.open('Student updated succesfully', undefined, {
-          duration: 2000,
-        });
-      },
-      (errorResponse) => {
-        // log it
+    if (this.studentDetailsForm?.form.valid) {
+
+      if ((this.student.mobile.toString().length < 5) || (this.student.mobile.toString().length > 10)) {
+         this.snackbar.open('Mobile number must be 5 to 10 numbers long', undefined, {
+           duration: 2000,
+         });     
+      } else {
+             
+        this._studentService
+          .updateStudent(this.student.id, this.student)
+          .subscribe(
+            (successResponse) => {
+              // show a notification
+              this.snackbar.open('Student updated succesfully', undefined, {
+                duration: 2000,
+              });
+            },
+            (errorResponse) => {
+              // log it
+            }
+          );
       }
-    );
+    }    
   }
 
   onDelete(): void {
@@ -118,21 +133,24 @@ export class ViewStudentComponent implements OnInit {
   }
 
   onAdd(): void {
-    this._studentService.addStudent(this.student).subscribe(
-      (successResponse) => {
-        // show a notification
-        this.snackbar.open('Student added succesfully', undefined, {
-          duration: 2000,
-        });
+    if (this.studentDetailsForm?.form.valid) {
+      // Submit form data to API
+        this._studentService.addStudent(this.student).subscribe(
+          (successResponse) => {
+            // show a notification
+            this.snackbar.open('Student added succesfully', undefined, {
+              duration: 2000,
+            });
 
-        setTimeout(() => {
-          this.router.navigateByUrl(`students/${successResponse.id}`);
-        }, 2000);
-      },
-      (errorResponse) => {
-        // console.log(errorResponse);
-      }
-    );
+            setTimeout(() => {
+              this.router.navigateByUrl(`students/${successResponse.id}`);
+            }, 2000);
+          },
+          (errorResponse) => {
+            console.log(errorResponse);
+          }
+        );
+    }  
   }
 
   // *** CHECK FOR this.profileImageUrl **
